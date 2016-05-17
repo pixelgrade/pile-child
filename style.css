@@ -1,0 +1,29 @@
+/*
+Theme Name: Pile Child
+Theme URI: https://pixelgrade.com/demos/pile2/
+Author: PixelGrade
+Author URI: https://pixelgrade.com/
+Description: They just keep piling on and on.
+Template: pile
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: pile-child
+Domain Path: /languages/
+Tags: white, light, dark, responsive-layout, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, full-width-template, microformats, post-formats, rtl-language-support, sticky-post, theme-options, translation-ready
+Requires at least: 4.4
+Tested up to: 4.5
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+Pile is based on Underscores http://underscores.me/, (C) 2012-2013 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+*/
+
+/* ADD YOUR NEW CSS RULES HERE */
+
+/* This file assumes you wish to add new CSS rules that will overwrite the ones in the parent's CSS files
+
+If you wish however, you can copy the whole style.css file from the parent here and hack at it - see functions.php for more details.
+In that case please remember that you still need to retain the header above (replace the header of the parent style.css with the one above),
+specifically the 'Template: pile' line. */
