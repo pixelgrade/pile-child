@@ -39,10 +39,11 @@ add_action( 'after_setup_theme', 'pile_child_theme_setup' );
  */
 
 function pile_child_enqueue_styles() {
+	// First we need to load the template style since it won't be loaded by the parent
+	wp_enqueue_style( 'pile-main-style', get_template_directory_uri() . '/style.css', array( 'wp-mediaelement' ), '20160501' );
 
 	// Here we are adding the child style.css while still retaining
 	// all of the parents assets (style.css, JS files, etc)
-
 	wp_enqueue_style( 'pile-child-style',
 		get_stylesheet_directory_uri() . '/style.css',
 		array('pile-main-style') //make sure the the child's style.css comes after the parents so you can overwrite rules
