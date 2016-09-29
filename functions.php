@@ -40,12 +40,49 @@ add_action( 'after_setup_theme', 'pile_child_theme_setup' );
 
 function pile_child_enqueue_styles() {
 	$theme = wp_get_theme();
+	// use the parent version for cachebusting
+	$parent = $theme->parent();
 
-	// First we need to load the template style since it won't be loaded by the parent
-	wp_enqueue_style( 'pile-main-style', get_template_directory_uri() . '/style.css', array( 'wp-mediaelement' ), $theme->get( 'Version' ) );
+	/*
+	 * First we need to enqueue the parent style since it won't be automatically by the child theme
+	 */
 
-	// Here we are adding the child style.css while still retaining
-	// all of the parents assets (style.css, JS files, etc)
+	//we need the same logic for the dependencies as in the parent
+	$main_style_deps = array( 'wp-mediaelement' );
+	//only enqueue the de default font if Customify is not present
+	if ( ! class_exists( 'PixCustomifyPlugin' ) ) {
+		wp_enqueue_style( 'pile-fonts-trueno', get_template_directory_uri() . '/assets/fonts/trueno/stylesheet.css' );
+		$main_style_deps[] = 'pile-fonts-trueno';
+	} else {
+		// we will load the Trueno font only if it is selected in one of the Customify's fields
+		$fonts = array( 'google_titles_font', 'google_descriptions_font', 'google_nav_font', 'google_body_font' );
+		foreach ( $fonts as $font ) {
+			$val = pile_option( $font );
+			if ( ! empty( $val ) ) {
+
+				if ( is_string( $val ) ) {
+					$val = json_decode(  wp_unslash( PixCustomifyPlugin::decodeURIComponent($val) ), true );
+				}
+
+				if ( ! empty( $val ) && is_array( $val ) && in_array( 'Trueno', $val ) ) {
+					wp_enqueue_style( 'pile-fonts-trueno', get_template_directory_uri() . '/assets/fonts/trueno/stylesheet.css' );
+					break;
+				}
+			}
+		}
+	}
+
+	if ( !is_rtl() ) {
+		wp_enqueue_style( 'pile-main-style', get_template_directory_uri() .'/style.css', $main_style_deps, $parent->get( 'Version' ) );
+	} else {
+		wp_enqueue_style( 'pile-main-style', get_template_directory_uri() . '/rtl.css', $main_style_deps, $parent->get( 'Version' ) );
+	}
+
+	/*
+	 * Now for the child theme styles.
+	 * Here we are adding the child style.css while still retaining
+	 * all of the parents assets (style.css, JS files, etc)
+	 */
 	wp_enqueue_style( 'pile-child-style',
 		get_stylesheet_directory_uri() . '/style.css',
 		array('pile-main-style') //make sure the the child's style.css comes after the parents so you can overwrite rules
